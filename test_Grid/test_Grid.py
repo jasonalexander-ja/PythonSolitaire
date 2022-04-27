@@ -1,3 +1,4 @@
+from typing import List, Tuple
 from Grid import Cell, Grid as gr
 
 
@@ -7,7 +8,7 @@ GRID_STRING = f"""{chr(9608)}{chr(9608)}{chr(9608)}{chr(9608)}
 """
 
 
-def get_cells() -> list[Cell.Cell]:
+def get_cells() -> List[Cell.Cell]:
     res = []
     for y in range(0, GRID_SIZE):
         res.extend(Cell.ValidCell(x, y, GRID_SIZE, Cell.CellState.not_empty) for x in
@@ -71,9 +72,12 @@ class TestGrid:
             assert(valid_cell.state == Cell.CellState.empty)
 
     def test_get_potential_pegs(self):
-        cells = [(3, 1), (3, 5), (1, 3), (5, 3)]
+        cells: List[Tuple[int, int]] = [(3, 1), (3, 5), (1, 3), (5, 3)]
         grid = gr.Grid()
-        pot_cells = grid.get_potential_pegs(3, 3)
+        pot_cells = map(
+            lambda i: (grid.cells[i].x, grid.cells[i].y),
+            grid.get_potential_pegs(3, 3)
+        )
         for peg in pot_cells:
             assert(peg in cells)
         no_pot_cells = grid.get_potential_pegs(1, 3)

@@ -1,33 +1,9 @@
+from typing import List, Tuple
 from Grid import Cell
 from Cell import copy_cell
+from Constants import DEFAULT_GRID_SIZE, DEFAULT_INVALID_CELLS, DEFAULT_BLANK_CELL
 import math
 
-
-DEFAULT_GRID_SIZE = 7
-
-DEFAULT_INVALID_CELLS = [
-    (0, 0),
-    (1, 0),
-    (0, 1),
-    (1, 1),
-
-    (5, 0),
-    (6, 0),
-    (5, 1),
-    (6, 1),
-
-    (0, 5),
-    (0, 6),
-    (1, 5),
-    (1, 6),
-
-    (5, 5),
-    (6, 5),
-    (5, 6),
-    (6, 6)
-]
-
-DEFAULT_BLANK_CELL = (3, 3)
 
 def make_default_cell(x: int, y: int) -> Cell:
     if (x, y) in DEFAULT_INVALID_CELLS:
@@ -79,7 +55,7 @@ class Grid:
             return Cell.EmptyCell()
         return self.cells[index]
 
-    def find_hole_indexes(self) -> list[int]:
+    def find_hole_indexes(self) -> List[int]:
         holes = []
         for index, cell in enumerate(self.cells):
             if not isinstance(cell, Cell.ValidCell):
@@ -89,14 +65,14 @@ class Grid:
                 holes.append(index)
         return holes
 
-    def find_holes(self) -> list[Cell.Cell]:
+    def find_holes(self) -> List[Cell.Cell]:
         res = map(
             lambda i: self.cells[i],
             self.find_hole_indexes()
         )
         return list(res)
 
-    def get_potential_pegs(self, x: int, y: int) -> list[tuple[int, int]]:
+    def get_potential_pegs(self, x: int, y: int) -> List[int]:
         one_up = self.get_cell(x, y - 2)
         one_down = self.get_cell(x, y + 2)
         one_left = self.get_cell(x - 2, y)
@@ -105,11 +81,11 @@ class Grid:
             lambda c: c.is_valid() and c.can_move_over(),
             [one_up, one_down, one_left, one_right]
         )
-        res = map(lambda c: (c.x, c.y), valid_cells)
+        res = map(lambda c: (c.get_index()), valid_cells)
         return list(res)
 
     grid_size: int = DEFAULT_GRID_SIZE
-    cells: list[Cell.Cell]
+    cells: List[Cell.Cell]
 
 
 def copy_grid(g: Grid) -> Grid:
