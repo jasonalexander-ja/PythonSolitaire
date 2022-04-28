@@ -17,7 +17,7 @@ class Cell:
         return self.y * self.no_of_rows + self.x
 
     def get_value(self) -> int:
-        return 0
+        return int(0)
 
     def get_str(self) -> str:
         return f"{chr(0x2593)}{chr(0x2593)}"
@@ -51,7 +51,8 @@ class ValidCell(Cell):
 
     def get_value(self) -> int:
         value = math.pow(2, self.get_index())
-        return value if self.state.value == 1 else 0
+        res = value if self.state.value == 1 else 0
+        return int(res)
 
     def get_str(self) -> str:
         if self.state.value == 1:

@@ -1,11 +1,14 @@
 from typing import List, Tuple
-from Grid import Cell, Grid as gr
+from Grid import Grid as gr
+from Grid.Grid import Cell
 
 
 GRID_SIZE = 2
 GRID_STRING = f"""{chr(9608)}{chr(9608)}{chr(9608)}{chr(9608)}
 {chr(9608)}{chr(9608)}{chr(9608)}{chr(9608)}
 """
+
+print("Hello world")
 
 
 def get_cells() -> List[Cell.Cell]:
@@ -75,10 +78,17 @@ class TestGrid:
         cells: List[Tuple[int, int]] = [(3, 1), (3, 5), (1, 3), (5, 3)]
         grid = gr.Grid()
         pot_cells = map(
-            lambda i: (grid.cells[i].x, grid.cells[i].y),
+            lambda i: (grid.cells[i[0]].x, grid.cells[i[0]].y),
             grid.get_potential_pegs(3, 3)
         )
         for peg in pot_cells:
             assert(peg in cells)
         no_pot_cells = grid.get_potential_pegs(1, 3)
         assert(len(no_pot_cells) == 0)
+
+
+def test_copy_grid():
+    grid = gr.Grid()
+    new_grid = gr.copy_grid(grid)
+    assert(grid.get_grid_value() == new_grid.get_grid_value())
+

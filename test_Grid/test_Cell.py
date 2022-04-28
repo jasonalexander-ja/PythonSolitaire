@@ -22,11 +22,19 @@ class TestCell:
         cell = Cell.Cell(2, 2, 3)
         assert(cell.get_str() == f"{chr(0x2593)}{chr(0x2593)}")
 
+    def test_can_move_over(self):
+        cell = Cell.Cell(2, 2, 3)
+        assert(not cell.can_move_over())
+
 
 class TestEmptyCell:
     def test_get_value(self):
         cell = Cell.EmptyCell(0, 0, GRID_SIZE)
         assert(cell.get_value() == 0)
+
+    def test_can_move_over(self):
+        cell = Cell.EmptyCell(2, 2, 3)
+        assert(not cell.can_move_over())
 
 
 class TestValidCell:
@@ -46,3 +54,14 @@ class TestValidCell:
 
         cell2 = Cell.ValidCell(2, 2, 3, Cell.CellState.not_empty)
         assert(cell2.get_str() == f"{chr(9608)}{chr(9608)}")
+
+    def test_can_move_over(self):
+        cell = Cell.ValidCell(2, 2, 3)
+        assert(not cell.can_move_over())
+        cell = Cell.ValidCell(2, 2, 3, Cell.CellState.not_empty)
+        assert(cell.can_move_over())
+
+    def test_change_state(self):
+        cell = Cell.ValidCell(2, 2, 3)
+        cell.change_state(Cell.CellState.not_empty)
+        assert(cell.state == Cell.CellState.not_empty)

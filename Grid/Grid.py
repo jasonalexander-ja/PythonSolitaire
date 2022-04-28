@@ -1,35 +1,34 @@
 from typing import List, Tuple
-from Grid import Cell
-from Cell import copy_cell
-from Constants import DEFAULT_GRID_SIZE, DEFAULT_INVALID_CELLS, DEFAULT_BLANK_CELL
+from Grid import Cell, Constants
 import math
 
 
 def make_default_cell(x: int, y: int) -> Cell:
-    if (x, y) in DEFAULT_INVALID_CELLS:
-        return Cell.EmptyCell(x, y, DEFAULT_GRID_SIZE)
-    elif (x, y) == DEFAULT_BLANK_CELL:
-        return Cell.ValidCell(x, y, DEFAULT_GRID_SIZE, Cell.CellState.empty)
-    return Cell.ValidCell(x, y, DEFAULT_GRID_SIZE, Cell.CellState.not_empty)
+    if (x, y) in Constants.DEFAULT_INVALID_CELLS:
+        return Cell.EmptyCell(x, y, Constants.DEFAULT_GRID_SIZE)
+    elif (x, y) == Constants.DEFAULT_BLANK_CELL:
+        return Cell.ValidCell(x, y, Constants.DEFAULT_GRID_SIZE, Cell.CellState.empty)
+    return Cell.ValidCell(x, y, Constants.DEFAULT_GRID_SIZE, Cell.CellState.not_empty)
 
 
 def make_default_grid():
     res = []
-    for y in range(0, DEFAULT_GRID_SIZE):
-        res.extend(make_default_cell(x, y) for x in range(0, DEFAULT_GRID_SIZE))
+    for y in range(0, Constants.DEFAULT_GRID_SIZE):
+        res.extend(
+            make_default_cell(x, y) for x in range(0, Constants.DEFAULT_GRID_SIZE))
     return res
 
 
 class Grid:
     def __init__(self) -> None:
         self.cells = make_default_grid()
-        self.grid_size = DEFAULT_GRID_SIZE
+        self.grid_size = Constants.DEFAULT_GRID_SIZE
 
     def get_grid_value(self) -> int:
         res = 0
         for cell in self.cells:
             res += cell.get_value()
-        return res
+        return int(res)
 
     def get_grid_str(self) -> str:
         res = ""
@@ -72,24 +71,24 @@ class Grid:
         )
         return list(res)
 
-    def get_potential_pegs(self, x: int, y: int) -> List[int]:
-        one_up = self.get_cell(x, y - 2)
-        one_down = self.get_cell(x, y + 2)
-        one_left = self.get_cell(x - 2, y)
-        one_right = self.get_cell(x + 2, y)
+    def get_potential_pegs(self, x: int, y: int) -> List[Tuple[int, int]]:
+        one_up = (self.get_cell(x, y - 2), self.get_cell(x, y - 1))
+        one_down = (self.get_cell(x, y + 2), self.get_cell(x, y + 1))
+        one_left = (self.get_cell(x - 2, y), self.get_cell(x - 1, y))
+        one_right = (self.get_cell(x + 2, y), self.get_cell(x + 1, y))
         valid_cells = filter(
-            lambda c: c.is_valid() and c.can_move_over(),
+            lambda c: c[0].is_valid() and c[1].can_move_over(),
             [one_up, one_down, one_left, one_right]
         )
-        res = map(lambda c: (c.get_index()), valid_cells)
+        res = map(lambda c: (c[0].get_index(), c[1].get_index()), valid_cells)
         return list(res)
 
-    grid_size: int = DEFAULT_GRID_SIZE
+    grid_size: int = Constants.DEFAULT_GRID_SIZE
     cells: List[Cell.Cell]
 
 
 def copy_grid(g: Grid) -> Grid:
-    new_cells = map(lambda c: copy_cell(c), g.cells)
+    new_cells = map(lambda c: Cell.copy_cell(c), g.cells)
     new_grid = Grid()
     new_grid.cells = list(new_cells)
     new_grid.grid_size = g.grid_size
