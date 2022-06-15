@@ -16,7 +16,7 @@ class Cell:
     def get_index(self) -> int:
         return self.y * self.no_of_rows + self.x
 
-    def get_value(self) -> int:
+    def get_value(self, index: int) -> int:
         return int(0)
 
     def get_str(self) -> str:
@@ -49,8 +49,8 @@ class ValidCell(Cell):
         self.state = state
         super().__init__(x, y, noOfRows)
 
-    def get_value(self) -> int:
-        value = math.pow(2, self.get_index())
+    def get_value(self, index: int) -> int:
+        value = math.pow(2, index)
         res = value if self.state.value == 1 else 0
         return int(res)
 

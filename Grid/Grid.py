@@ -26,8 +26,12 @@ class Grid:
 
     def get_grid_value(self) -> int:
         res = 0
+        index = 0
         for cell in self.cells:
-            res += cell.get_value()
+            if isinstance(cell, Cell.EmptyCell):
+                continue
+            res += cell.get_value(index)
+            index += 1
         return int(res)
 
     def get_grid_str(self) -> str:

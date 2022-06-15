@@ -30,7 +30,7 @@ class TestCell:
 class TestEmptyCell:
     def test_get_value(self):
         cell = Cell.EmptyCell(0, 0, GRID_SIZE)
-        assert(cell.get_value() == 0)
+        assert(cell.get_value(1) == 0)
 
     def test_can_move_over(self):
         cell = Cell.EmptyCell(2, 2, 3)
@@ -40,13 +40,13 @@ class TestEmptyCell:
 class TestValidCell:
     def test_get_value(self):
         cell1 = Cell.ValidCell(0, 0, GRID_SIZE, Cell.CellState.empty)
-        assert(cell1.get_value() == 0)
+        assert(cell1.get_value(0) == 0)
 
         cell2 = Cell.ValidCell(2, 2, GRID_SIZE, Cell.CellState.not_empty)
-        assert(cell2.get_value() == 256)
+        assert(cell2.get_value(8) == 256)
 
         cell3 = Cell.ValidCell(2, 2, GRID_SIZE, Cell.CellState.empty)
-        assert(cell3.get_value() == 0)
+        assert(cell3.get_value(8) == 0)
 
     def test_get_str(self):
         cell1 = Cell.ValidCell(2, 2, 3, Cell.CellState.empty)
